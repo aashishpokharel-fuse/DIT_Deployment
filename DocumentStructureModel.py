@@ -46,11 +46,7 @@ class DocumentStructureModel(object):
         print("Loaded model")
 
     def predict(self, X, feature_names = None):
-        # img = np.array(Image.open(io.BytesIO(X)).convert("RGB"))[:, :, ::-1]
-        # encoded = base64.b64encode(X.read())
         print("X IS:",type(X))
-        # X = io.BytesIO(X)
-        # print("X IS:",type(X))
         if isinstance(X, list) or isinstance(X, np.ndarray):
             img = []
             for item in X:

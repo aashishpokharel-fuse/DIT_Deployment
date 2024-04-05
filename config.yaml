@@ -1,5 +1,13 @@
+# DIT
 # In MODEL_PATH : Only change the second value
+
 MODEL_PATH: ["MODEL.WEIGHTS", "model/model_weights.pth"] 
 CONFIG_PATH: "model/cascade_dit_base.yaml"
 RNN_PATH: "model/Base-RCNN-FPN.yaml"
 DOWNLOAD_MODEL_PATH: "model/model_weights.pth"
+
+# OCR 
+
+
+# ALIGNMENT
+
