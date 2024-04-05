@@ -1,0 +1,5 @@
+test_image/
+warped_image/
+document_aligner/deep_homography/out/*
+data/*
+*__pycache__/
