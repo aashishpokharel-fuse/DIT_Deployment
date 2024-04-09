@@ -242,7 +242,7 @@ class OCR_Model(nn.Module):
                             completed_beam_count += 1
                             
                             continue
-                    if beam[-1] == eos_idx:
+                    if beam[-1] == eos_idx or t == max_char_len:
                         completed_beams[i].append(beam.clone())
                         completed_beams_logits[i].append(next_beams_logits[beam_idx].clone())
                         completed_beams_confidence[i].append(next_beam_confidence[beam_idx].clone())

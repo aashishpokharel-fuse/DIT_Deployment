@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import numpy as np
 import cv2
-import pytesseract
+# import pytesseract
 import re
 
 from ocr.custom_ocr.inference import predict

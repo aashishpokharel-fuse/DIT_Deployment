@@ -15,7 +15,7 @@ from ocr.custom_ocr.ocr_model import OCR_Model
 from ocr.custom_ocr.utils import read_vocab_file
 
 # CONFIG_PATH = "./"
-CONFIG_PATH = "/home/ubuntu/info_extraction_engine_ml_demo/extraction_engine_demo_ml/"
+CONFIG_PATH = "./"
 
 def load_config(config_name):
     with open(os.path.join(CONFIG_PATH, config_name)) as file:

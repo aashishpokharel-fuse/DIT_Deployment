@@ -1,4 +1,5 @@
-import os 
+import os
+from tracemalloc import start 
 import cv2
 import sys
 import time
@@ -9,7 +10,7 @@ import numpy as np
 from pathlib import Path
 from collections import ChainMap
 import torch
-
+from multiprocessing import Pool, cpu_count
 
 from alignment_model.orb_aligner import OrbAligner
 from alignment_model.post_processing import homography_calculation
@@ -79,10 +80,8 @@ def warp_image_to_reference(original_input_img, reference_img, homography_hat):
 
     warp_image_2 = warp_image(data_image_2, ref_homography_mat, (rih, riw))
 
-    warp_image_2 = warp_image_2.astype(np.uint8)
+    warped_image = warp_image_2.astype(np.uint8)
 
-    warped_image = cv2.cvtColor(warp_image_2, cv2.COLOR_BGR2RGB)
-    
     return warped_image
 
 
@@ -143,7 +142,7 @@ def align_image(images, model, device):
     processed_input_imgs = [preprocess_image(images) for images in images]
     processed_reference_imgs = [reference_img for _ in range(len(images))]
 
-    batch_size = 16
+    batch_size = 32
     
     with torch.no_grad():
         model.eval()
@@ -157,16 +156,36 @@ def align_image(images, model, device):
             
             inputs = torch.cat(input_images, dim=0).to(device)
             ref_imgs = torch.cat(ref_images, dim=0).to(device)
-            
+            start_time= time.time()
             outputs = model(inputs, ref_img=ref_imgs)
-            outputs = outputs.detach().cpu()
+            outputs = outputs.detach().cpu().numpy()
+            # print("model time", time.time()-start_time)
+            
+            input_data = [{
+                    "output": outputs[j].copy(),
+                    "input_image": input_images[j].clone(),
+                    "original_image": original_images[j].squeeze(0).clone(),
+                    "original_ref_image": original_ref_images[j].copy(),
+                } for j in range(len(outputs))]
+            
+            num_cores = cpu_count()
+            # with Pool(processes=10) as pool:
+            #     pool.map(process_image, input_data)
+            #     pool.close()
+            #     pool.join()
             for j in range(len(outputs)):
-                homography_hat = homography_calculation(outputs[j].numpy(), input_images[j]) 
-                aligned_image = warp_image_to_reference(original_images[j].squeeze(0), original_ref_images[j], homography_hat)
+                result = process_image(input_data[j])
+                aligned_images.append(result)
                 
-                # disabled since we are not using reference image
-                # aligned_image = post_process_aligned_img(original_input_img, original_reference_img)
-
-                aligned_images.append(aligned_image)
-        
         return aligned_images
+
+
+def process_image(data):
+    # print("starting")
+    start_time = time.time()
+    output, input_image, original_image, original_ref_image = data.values()
+    homography_hat = homography_calculation(output, input_image) 
+    # print("completed homographt calculation")
+    aligned_image = warp_image_to_reference(original_image, original_ref_image, homography_hat)
+    # print("single processing time",time.time() - start_time)
+    return aligned_image
