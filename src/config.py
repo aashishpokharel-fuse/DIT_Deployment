@@ -7,7 +7,7 @@ with open("./config.yaml", "r") as ymlfile:
 
 MODEL_PATH  = cfg['MODEL_PATH']
 CONFIG_PATH = cfg['CONFIG_PATH']
-
+CONFIG = cfg
 def load_model():
 
     # download_from_s3(cfg['DOWNLOAD_MODEL_PATH'])

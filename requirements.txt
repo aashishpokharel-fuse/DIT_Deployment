@@ -13,4 +13,15 @@ seldon-core==1.17.1
 python-dotenv
 boto3
 shapely
-# fastapi
+opencv-python
+pandas
+
+#Optional<dependency by alignment model for now>
+fastapi
+uvicorn
+python-multipart
+#required by ocr
+pymupdf
+paddlepaddle
+paddleclas
+faiss-cpu

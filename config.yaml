@@ -1,13 +1,19 @@
 # DIT
 # In MODEL_PATH : Only change the second value
 
-MODEL_PATH: ["MODEL.WEIGHTS", "model/model_weights.pth"] 
-CONFIG_PATH: "model/cascade_dit_base.yaml"
-RNN_PATH: "model/Base-RCNN-FPN.yaml"
-DOWNLOAD_MODEL_PATH: "model/model_weights.pth"
+MODEL_PATH: ["MODEL.WEIGHTS", "model/dit/model_weights.pth"] 
+CONFIG_PATH: "./model/dit/cascade_dit_base.yaml"
+RNN_PATH: "./model/dit/Base-RCNN-FPN.yaml"
+DOWNLOAD_MODEL_PATH: "./model/dit/model_weights.pth"
 
-# OCR 
+# Alignment
+alignment_model_path: "./model/alignment/checkpoints/410.pth"
+pulc_model_path: "./model/alignment/checkpoints/pulc"
+pulc_class_id_map_file : "./model/alignment/checkpoints/text_image_orientation_label_list.txt"
 
-
-# ALIGNMENT
+# OCR
+custom_ocr_path: "./model/ocr/796_2.pth"
+custom_ocr_char_path: "./ocr/custom_ocr/combined_char.txt"
+custom_ocr_config_path: "./ocr/custom_ocr/config.json"
+custom_ocr_batch_size: 32
 

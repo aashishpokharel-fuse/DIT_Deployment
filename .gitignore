@@ -2,12 +2,15 @@
 __pycache__/
 *.py[cod]
 *$py.class
+# pdf
+*.pdf
 
 base_64.ipynb
 # Model
 # model/
 *.pth
 test_image.png
+*.jpg
 
 # C extensions
 *.so

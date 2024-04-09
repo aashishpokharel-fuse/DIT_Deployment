@@ -65,9 +65,10 @@ class BatchPredictor:
         outputs = pred(inputs)
     """
 
-    def __init__(self, cfg):
+    def __init__(self, cfg, batch_size = 5):
         self.cfg = cfg.clone()  # cfg can be modified by model
         self.model = build_model(self.cfg)
+        self.batch_size = batch_size
         self.model.eval()
         if len(cfg.DATASETS.TEST):
             self.metadata = MetadataCatalog.get(cfg.DATASETS.TEST[0])
@@ -108,5 +109,7 @@ class BatchPredictor:
                 inputs_list.append(inputs)
 
             # predictions = self.model(inputs_list)[0]
-            predictions = self.model(inputs_list)
+            predictions = []
+            for i in range(0, len(inputs_list), self.batch_size):
+                predictions.extend(self.model(inputs_list[i:i+self.batch_size]))
             return predictions
